@@ -1,0 +1,2 @@
+This is a toy implementation of ManagedAgents(https://www.anthropic.com/engineering/managed-agents).
+We use docker containers as sandboxes.
