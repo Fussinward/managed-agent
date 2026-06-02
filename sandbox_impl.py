@@ -173,7 +173,7 @@ class Sandbox:
         '''export project file to host machine'''
         import os
         print(f"current working directory: {os.getcwd()}")
-        host_dest = f"./{project_name}/"
+        host_dest = f"./exported/{project_name}/"
         result = subprocess.run(
             ["docker", "cp", "-L", f"{self.container_id}:{sbx_prjt_root}", host_dest],
             capture_output=True, text=True

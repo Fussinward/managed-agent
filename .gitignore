@@ -1,3 +1,4 @@
 .env
 sessions.db
 __pycache__/
+exported/
