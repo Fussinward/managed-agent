@@ -1,2 +1,2 @@
 .env
-sessions.db
+./sessions.db
