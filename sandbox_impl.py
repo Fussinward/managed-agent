@@ -145,7 +145,7 @@ class Sandbox:
         print("executing: " + command)
         process = subprocess.run(
             ["docker", "exec", self.container_id, "sh", "-c", command],
-            capture_output=True, text=True, encoding="utf-8"
+            capture_output=True, text=True, encoding="utf-8", timeout=120
         )
         res = process.stdout + process.stderr
         print(res)
