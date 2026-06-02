@@ -34,6 +34,7 @@ class Session:
         conn.commit()
         pass
 
+    @staticmethod
     def select_session_id() -> int:
         conn = sqlite3.connect("sessions.db")
         c = conn.cursor()

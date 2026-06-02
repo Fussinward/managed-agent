@@ -9,7 +9,6 @@ class ToolResult(TypedDict):
     tool_call_id: str
     content: str
 
-
 class Sandbox:
     def __init__(self, session_id: int):
         self.session_id = session_id
@@ -145,7 +144,7 @@ class Sandbox:
         print("executing: " + command)
         process = subprocess.run(
             ["docker", "exec", self.container_id, "sh", "-c", command],
-            capture_output=True, text=True, encoding="utf-8", timeout=120
+            capture_output=True, text=True, encoding="utf-8"
         )
         res = process.stdout + process.stderr
         print(res)
