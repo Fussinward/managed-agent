@@ -30,9 +30,8 @@ class Harness:
     def run(self, user_input: str, hist: list[dict]) -> None:
         hist.append({"role": "user", "content": user_input}) 
         self.session.emit_event({"role": "user", "content": user_input})
-        messages = hist
+        messages = [sys_prompt] + hist
         tools = self.sandbox.tool_schemas()
-        messages.append(sys_prompt)
         response = self.send_message(messages=messages, tools=tools)
         msg = response.choices[0].message
         while msg.tool_calls:
