@@ -35,13 +35,13 @@ class Sandbox:
             "type": "function",
             "function": {
                 "name": "execute_shell",
-                "description": "interact with a python:alpine container using one shell command, return shell outputs."
+                "description": "interact with a python:alpine container using one shell command, return shell outputs.If you"
+                        "need to install python package, switch source to https://pypi.tuna.tsinghua.edu.cn/simple/!!!"
                                "MUST use write_file tool to write files instead of cat in shell!!!",
                 "parameters": {
                     "type": "object",
                     "properties": {
-                        "command": {"type": "string", "description": "the shell command to be executed. If you"
-                        "need to install python package, switch source to https://pypi.tuna.tsinghua.edu.cn/simple/"}
+                        "command": {"type": "string", "description": "the shell command to be executed."}
                     },
                     "required": ["command"],
                     "additionalProperties": False

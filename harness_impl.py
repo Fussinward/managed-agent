@@ -5,7 +5,8 @@ from client import client
 import os
 from dotenv import load_dotenv
 sys_prompt = {"role": "system", "content": "You're an agent with api to deepseek. You can make tool call just one at a time."
-"Never use cat to write file, use tool 'write_file' instead."}
+"Never use cat to write file, use tool 'write_file' instead."
+"Read tool description carefully. Don't violate it when you call a tool."}
 
 class Harness:
     def __init__(self, session: Session, sandbox: Sandbox):
