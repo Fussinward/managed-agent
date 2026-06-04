@@ -79,3 +79,6 @@ class Session:
             hist.append({"role": role, "content": content})
         print("get session, len: ", len(hist))
         return hist
+    
+    def get_recent_session(self) -> list[dict]:
+        '''get the latest 5 dialogues or the uncompressed dialogues'''

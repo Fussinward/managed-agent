@@ -1,1 +1,10 @@
 去你妈的，当务之急就是上下文工程，别扯没用的，做完这个才能开始下一步。这也很简单，怎么把compress_hist函数实现了？
+
+
+如果content是这个类型的，直接返回这个，重新调用，不用人工介入, 会让它provision，草了，你得说清楚怎么调用，直接传调用逻辑；
+content: ChatCompletionMessageFunctionToolCall(id='call_00_RcY9LxL4K5UDRpMn0Ebb1800', function=Function(arguments='{"command": "pip install numba -i https://pypi.tuna.tsinghua.edu.cn/simple/ 2>&1 | tail -5"}', name='execute_shell'), type='function', index=0)
+user input:toolcall失败，请重新调用，注意调用格式
+
+the cat thing, holy fuck.
+
+显然，你需要写一个del_session这种东西

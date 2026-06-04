@@ -13,8 +13,26 @@ class Harness:
         self.session = session
         self.sandbox = sandbox
         
-    def compress_hist(hist: list[dict]) -> list[dict]:
+    def compress_hist(self, hist: list[dict]) -> None:
+        '''compress hist and hist.md to create a new hist.md'''
         pass
+
+    def get_hist(self) -> str:
+        '''create or get hist.md'''
+
+    def write_NOTES(self) -> None:
+        '''call LLM to write NOTES.md'''
+        pass
+
+    def get_NOTES(self) -> str:
+        '''create or get NOTES.md'''
+        pass
+    
+    def assemble_context(self) -> list[dict]:
+        '''assemble hist.md, NOTES.md and recent dialogues into one message'''
+
+    def compact(self) -> None:
+        '''update NOTES.md and hist.md for every 50 dialogues'''
 
     def send_message(self, messages, tools) -> ChatCompletion:
         load_dotenv()
