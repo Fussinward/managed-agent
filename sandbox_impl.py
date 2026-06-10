@@ -113,7 +113,7 @@ class Sandbox:
         if not flag:
             raise NameError
 
-        print("tool call: " + tool_calls.function.name)
+        print("\033[91mtool call:\033[0m " + tool_calls.function.name)
 
         if tool_calls.function.name == 'close':
             self.close()
@@ -147,7 +147,7 @@ class Sandbox:
             capture_output=True, text=True, encoding="utf-8"
         )
         res = process.stdout + process.stderr
-        print(res)
+        #print(res)
         return res
     
     def write_file(self, path: str, content: str) -> None:

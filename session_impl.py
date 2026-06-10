@@ -9,7 +9,6 @@ class Session:
                                       SESSION_ID = ?''', (self.session_id,))
         row = res.fetchone()                                      
         self.row_index = (row[0] + 1) if row[0] is not None else 0
-        pass
 
     @staticmethod
     def get_container_id(session_id: int) -> str|None:
@@ -32,7 +31,6 @@ class Session:
         c.execute('''INSERT OR REPLACE INTO SBX_SESSIONS (SESSION_ID, CONTAINER_ID)
                      VALUES (?, ?)''', (session_id, new_container_id))
         conn.commit()
-        pass
 
     @staticmethod
     def select_session_id() -> int:
@@ -80,5 +78,19 @@ class Session:
         print("get session, len: ", len(hist))
         return hist
     
-    def get_recent_session(self) -> list[dict]:
-        '''get the latest 5 dialogues or the uncompressed dialogues'''
+    def get_recent_dialogues(self) -> list[dict]:
+        row_num = self.row_index
+        if row_num % 100 == 1:
+            '''return latest 5 dialogues, that's 10 records'''
+            res = self.c.execute('''SELECT ROLE, CONTENT FROM SESSIONS WHERE SESSION_ID = ?
+                                    ORDER BY ROW_INDEX DESC LIMIT 10''', (self.session_id, ))  
+        else:
+            '''return latest row_num % 100'''
+            res = self.c.execute('''SELECT ROLE, CONTENT FROM SESSIONS WHERE SESSION_ID = ?
+                                    ORDER BY ROW_INDEX DESC LIMIT ?''', (self.session_id, row_num % 101))
+        
+        rows = res.fetchall()
+        hist = []
+        for role, content in reversed(rows):
+            hist.append({"role": role, "content": content})
+        return hist

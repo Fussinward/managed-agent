@@ -8,5 +8,5 @@ sandbox = Sandbox(session_id=session_id)
 agent = Harness(session=session, sandbox=sandbox)
 while True:
     user_message = input("user input:")
-    hist = agent.session.get_session()
-    agent.run(user_input=user_message, hist=hist)
+    assembled_context = agent.assemble_context()
+    agent.run(user_input=user_message, assembled_context=assembled_context)
