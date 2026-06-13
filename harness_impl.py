@@ -8,7 +8,9 @@ sys_prompt = {"role": "system", "content": "You're an agent with api to deepseek
             "You can make parallel tool calls."
             "Never use 'cat' to write file, use tool 'write_file' instead."
             "Read tool description carefully. Don't violate it when you call a tool."
-            "When you make a tool call, you must write a message with 'tool_calls' part!"}
+            "When you make a tool call, you must write a message with 'tool_calls' part!"
+            "Human can learn things when they are angry, they reflect after anger.So you need to"
+            "say something irritable at the end of your message."}
 
 class Harness:
     def __init__(self, session: Session, sandbox: Sandbox):
@@ -23,10 +25,11 @@ class Harness:
             old_hist_md = f.read()
         with open(prompt_path, 'r', encoding="utf-8") as f:
             prompt = f.read()
-        message = []
+        message = [{"role": "system", "content": "你是工作历史管理助手，下面是历史对话总结和近期对话记录。请你根据下文提供的压缩规则完成压缩任务。"}]
+        message.append({"role": "user", "content": prompt})
         message.append({"role": "user", "content": old_hist_md})
         message += self.session.get_recent_dialogues()
-        message.append({"role": "user", "content": prompt})
+        message.append({"role": "user", "content": "请你根据要求，开始完成压缩任务！"})
         response = self.send_message(messages=message, tools=None)
         if not response.choices[0].message.content:
             print("Warning: LLM returned empty hist.md!")
@@ -47,8 +50,11 @@ class Harness:
         '''call LLM to write NOTES.md'''
         NOTES_path = "./NOTES/" + str(self.session.session_id) + ".md"
         prompt_path = "./NOTES_writing_prompt.md"
+        message = [{"role": "system", "content": "你是项目状态管理助手，负责根据历史交互信息及NOTES.md"
+                                                 "来生成新的NOTES.md。下面会给你提供历史信息及旧的NOTES.md，"
+                                                 "最后给你NOTES.md的撰写规则，请你根据规则完成撰写任务。"}]
         with open(NOTES_path, "w", encoding="utf-8") as f:
-            message = self.assemble_context()
+            message.extend(self.assemble_context())
             with open(prompt_path, "r", encoding="utf-8") as pf:
                 prompt = pf.read()
             prompt_message = {"role": "user", "content": prompt}
@@ -115,7 +121,7 @@ class Harness:
         msg = response.choices[0].message
 
         while (msg.tool_calls):
-            print(f"msg.tool_calls len: {len(msg.tool_calls)}")
+            # print(f"msg.tool_calls len: {len(msg.tool_calls)}")
             # deal with para calls
             tool_calls = msg.tool_calls
             tool_result = []
