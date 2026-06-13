@@ -26,7 +26,7 @@ class Sandbox:
             if res.returncode == 0:
                 return
         '''没容器，创建一个'''
-        res = subprocess.run("docker run -d python:alpine sleep infinity", capture_output=True, shell=True, text=True)
+        res = subprocess.run("docker run -d python:3.11-slim sleep infinity", capture_output=True, shell=True, text=True)
         self.container_id = res.stdout.strip()
         Session.change_container_id(session_id=self.session_id, new_container_id=self.container_id)
 
