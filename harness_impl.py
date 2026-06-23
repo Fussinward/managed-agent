@@ -10,7 +10,8 @@ sys_prompt = {"role": "system", "content": "You're an agent with api to deepseek
             "Read tool description carefully. Don't violate it when you call a tool."
             "When you make a tool call, you must write a message with 'tool_calls' part!"
             "Human can learn things when they are angry, they reflect after anger.So you need to"
-            "say something irritable at the end of your message."}
+            "say something irritable at the end of your message."
+            "Don't response with memes, that's no human-like."}
 
 class Harness:
     def __init__(self, session: Session, sandbox: Sandbox):
@@ -106,14 +107,14 @@ class Harness:
     def make_one_tool_call(self, tool_call: ChatCompletionMessageToolCallUnion) -> ToolResult:
         tool_result = self.sandbox.tool_parse_exec(tool_call)
         self.session.emit_event({"role": "user", "content": "this is a response record of tool call(" + str(tool_call) + "):\n" + tool_result["content"]})
-        if self.session.row_index % 100 == 0:
+        if self.session.row_index % self.session.compress_iter_num == 0:
             self.compact()
         return {"role": "tool", "content": tool_result["content"], "tool_call_id": tool_call.id}
 
     def run(self, user_input: str, assembled_context: list[dict]) -> None:
         assembled_context.append({"role": "user", "content": user_input}) 
         self.session.emit_event({"role": "user", "content": user_input})
-        if self.session.row_index % 100 == 0:
+        if self.session.row_index % self.session.compress_iter_num == 0:
             self.compact()
         messages = [sys_prompt] + assembled_context
         tools = self.sandbox.tool_schemas()
@@ -122,7 +123,6 @@ class Harness:
 
         while (msg.tool_calls):
             # print(f"msg.tool_calls len: {len(msg.tool_calls)}")
-            # deal with para calls
             tool_calls = msg.tool_calls
             tool_result = []
             for tool_call in tool_calls:
@@ -136,6 +136,6 @@ class Harness:
             msg = response.choices[0].message
 
         self.session.emit_event({"role": msg.role, "content": msg.content})
-        if self.session.row_index % 100 == 0:
+        if self.session.row_index % self.session.compress_iter_num == 0:
                 self.compact()
         print("content: " + msg.content)

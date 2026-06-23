@@ -1,10 +1,12 @@
 import sqlite3
+COMPRESS_ITER = 50
 
 class Session:
     def __init__(self, session_id: int):
         self.conn = sqlite3.connect("sessions.db")
         self.c = self.conn.cursor()
         self.session_id = session_id
+        self.compress_iter_num = COMPRESS_ITER
         res = self.c.execute('''SELECT MAX(ROW_INDEX) FROM SESSIONS WHERE
                                       SESSION_ID = ?''', (self.session_id,))
         row = res.fetchone()                                      
@@ -80,14 +82,14 @@ class Session:
     
     def get_recent_dialogues(self) -> list[dict]:
         row_num = self.row_index
-        if row_num % 100 == 1:
-            '''return latest 5 dialogues, that's 10 records'''
+        if row_num % self.compress_iter_num <= 10:
+            '''return latest 10 records'''
             res = self.c.execute('''SELECT ROLE, CONTENT FROM SESSIONS WHERE SESSION_ID = ?
                                     ORDER BY ROW_INDEX DESC LIMIT 10''', (self.session_id, ))  
         else:
-            '''return latest row_num % 100'''
+            '''return latest row_num % compress_iter_num'''
             res = self.c.execute('''SELECT ROLE, CONTENT FROM SESSIONS WHERE SESSION_ID = ?
-                                    ORDER BY ROW_INDEX DESC LIMIT ?''', (self.session_id, row_num % 101))
+                                    ORDER BY ROW_INDEX DESC LIMIT ?''', (self.session_id, row_num % (self.compress_iter_num + 1)))
         
         rows = res.fetchall()
         hist = []

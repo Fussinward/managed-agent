@@ -7,6 +7,7 @@ session = Session(session_id=session_id)
 sandbox = Sandbox(session_id=session_id)
 agent = Harness(session=session, sandbox=sandbox)
 while True:
+    print("-" * 60)
     user_message = input("user input:")
     assembled_context = agent.assemble_context()
     agent.run(user_input=user_message, assembled_context=assembled_context)
