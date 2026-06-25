@@ -1,2 +1,5 @@
 This is a toy implementation of ManagedAgents(https://www.anthropic.com/engineering/managed-agents).
 We use docker containers as sandboxes.
+
+todo
+任务超10s，返回PID；给check_task(pid)和wait(pid, time=)接口

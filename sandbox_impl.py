@@ -35,7 +35,7 @@ class Sandbox:
             "type": "function",
             "function": {
                 "name": "execute_shell",
-                "description": "interact with a python:alpine container using one shell command, return shell outputs.If you"
+                "description": "interact with a python container using one shell command, return shell outputs.If you"
                         "need to install python package, switch source to https://pypi.tuna.tsinghua.edu.cn/simple/!!!"
                                "MUST use write_file tool to write files instead of cat in shell!!!",
                 "parameters": {
@@ -171,8 +171,6 @@ class Sandbox:
     
     def export_file(self, sbx_prjt_root: str, project_name: str) -> None:
         '''export project file to host machine'''
-        import os
-        print(f"current working directory: {os.getcwd()}")
         host_dest = f"./exported/{project_name}/"
         result = subprocess.run(
             ["docker", "cp", "-L", f"{self.container_id}:{sbx_prjt_root}", host_dest],

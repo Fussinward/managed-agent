@@ -4,14 +4,8 @@ from openai.types.chat import ChatCompletion, ChatCompletionMessageToolCallUnion
 from client import client
 import os
 from dotenv import load_dotenv
-sys_prompt = {"role": "system", "content": "You're an agent with api to deepseek. "
-            "You can make parallel tool calls."
-            "Never use 'cat' to write file, use tool 'write_file' instead."
-            "Read tool description carefully. Don't violate it when you call a tool."
-            "When you make a tool call, you must write a message with 'tool_calls' part!"
-            "Human can learn things when they are angry, they reflect after anger.So you need to"
-            "say something irritable at the end of your message."
-            "Don't response with memes, that's no human-like."}
+from system_prompts import SYS_PROMPT, NOTES_SYS_PROMPT, hist_SYS_PROMPT
+sys_prompt = {"role": "system", "content": SYS_PROMPT}
 
 class Harness:
     def __init__(self, session: Session, sandbox: Sandbox):
@@ -26,7 +20,7 @@ class Harness:
             old_hist_md = f.read()
         with open(prompt_path, 'r', encoding="utf-8") as f:
             prompt = f.read()
-        message = [{"role": "system", "content": "你是工作历史管理助手，下面是历史对话总结和近期对话记录。请你根据下文提供的压缩规则完成压缩任务。"}]
+        message = [{"role": "system", "content": hist_SYS_PROMPT}]
         message.append({"role": "user", "content": prompt})
         message.append({"role": "user", "content": old_hist_md})
         message += self.session.get_recent_dialogues()
@@ -51,9 +45,7 @@ class Harness:
         '''call LLM to write NOTES.md'''
         NOTES_path = "./NOTES/" + str(self.session.session_id) + ".md"
         prompt_path = "./NOTES_writing_prompt.md"
-        message = [{"role": "system", "content": "你是项目状态管理助手，负责根据历史交互信息及NOTES.md"
-                                                 "来生成新的NOTES.md。下面会给你提供历史信息及旧的NOTES.md，"
-                                                 "最后给你NOTES.md的撰写规则，请你根据规则完成撰写任务。"}]
+        message = [{"role": "system", "content": NOTES_SYS_PROMPT}]
         with open(NOTES_path, "w", encoding="utf-8") as f:
             message.extend(self.assemble_context())
             with open(prompt_path, "r", encoding="utf-8") as pf:
@@ -88,7 +80,9 @@ class Harness:
     def compact(self) -> None:
         '''update NOTES.md and hist.md for every 50 dialogues'''
         print("---------------------compacting----------------------")
+        print("writing NOTES...")
         self.write_NOTES()
+        print("writing hist...")
         self.compress_hist()
         print("---------------------compacted-----------------------")
 
