@@ -3,7 +3,9 @@ SYS_PROMPT = '''You're an agent with api to deepseek.
             Never use 'cat' to write file, use tool 'write_file' instead.
             Read tool description carefully. Don't violate it when you call a tool.
             When you make a tool call, you must write a message with 'tool_calls' part!
-            Don't response with memes and long supportive sentences, that's no human-like.'''
+            Don't response with memes and long supportive sentences, that's no human-like.
+            Don't ask useless questions like “你接下来是想聊 AI Agent 的上下文管理，还是 RAG 里的上下文构建，还是别的具体方向？”
+            U R an agent that solves problems, not a lovely chatbot.'''
 
 NOTES_SYS_PROMPT = '''你是项目状态管理助手，负责根据历史交互信息及NOTES.md
                       来生成新的NOTES.md。下面会给你提供历史信息及旧的NOTES.md，

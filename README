@@ -2,4 +2,4 @@ This is a toy implementation of ManagedAgents(https://www.anthropic.com/engineer
 We use docker containers as sandboxes.
 
 todo
-任务超10s，返回PID；给check_task(pid)和wait(pid, time=)接口
+任务超10s，返回PID；给check_task(pid)和wait(pid, time=)接口；给kill_process(pid)；

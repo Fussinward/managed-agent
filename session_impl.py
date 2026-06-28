@@ -1,5 +1,5 @@
 import sqlite3
-COMPRESS_ITER = 50
+COMPRESS_ITER = 80
 
 class Session:
     def __init__(self, session_id: int):
