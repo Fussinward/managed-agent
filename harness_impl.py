@@ -36,6 +36,8 @@ class Harness:
     def get_hist(self) -> str:
         '''create or get hist.md'''
         path = "./hist/" + str(self.session.session_id) + ".md"
+        if not os.path.exists("./hist/"):
+            os.makedirs("./hist/")
         if not os.path.exists(path):
             open(path, "x", encoding="utf-8").close()
         with open(path, "r", encoding="utf-8") as f:
@@ -62,6 +64,8 @@ class Harness:
     def get_NOTES(self) -> str:
         '''create or get NOTES.md'''
         path = "./NOTES/" + str(self.session.session_id) + ".md"
+        if not os.path.exists("./NOTES/"):
+            os.makedirs("./NOTES/")
         if not os.path.exists(path):
             open(path, "x", encoding="utf-8").close()
         with open(path, "r", encoding="utf-8") as f:
